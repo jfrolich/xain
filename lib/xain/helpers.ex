@@ -16,15 +16,25 @@ defmodule Xain.Helpers do
 
   defp _id_and_class_shortcuts([], attrs), do: {"", attrs}
 
+  @class_id_regex ~r/^[a-zA-Z\-_0-9]+[ ]?$/
   defp _id_and_class_shortcuts([h | t], attrs) do
     case h do
-      "#" <> id ->
-        id = String.trim(id)
-        _id_and_class_shortcuts(t, merge_id_or_class(:id, id, attrs))
+      contents = "#" <> id ->
+        if Regex.match?(@class_id_regex, id) do
+          id = String.trim(id)
+          _id_and_class_shortcuts(t, merge_id_or_class(:id, id, attrs))
+        else
+          {contents, attrs}
+        end
 
-      "." <> class ->
-        class = String.trim(class)
-        _id_and_class_shortcuts(t, merge_id_or_class(:class, class, attrs))
+      contents = "." <> class ->
+        if Regex.match?(@class_id_regex, class) do
+          class = String.trim(class)
+          _id_and_class_shortcuts(t, merge_id_or_class(:class, class, attrs))
+        else
+          IO.inspect(class)
+          {contents, attrs}
+        end
 
       # "%" <> name ->
       #   name = String.strip(name)
