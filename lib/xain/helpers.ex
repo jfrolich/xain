@@ -32,7 +32,6 @@ defmodule Xain.Helpers do
           class = String.trim(class)
           _id_and_class_shortcuts(t, merge_id_or_class(:class, class, attrs))
         else
-          IO.inspect(class)
           {contents, attrs}
         end
 
